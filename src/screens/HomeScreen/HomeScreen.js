@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Alert } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import axios from 'axios';
-import * as firebase from 'firebase'
-import 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import { BarCodeScanner } from "expo-barcode-scanner";
+import axios from "axios";
+import * as firebase from "firebase";
+import "firebase/firestore";
 
 const firebaseConfig = {
-
   apiKey: "AIzaSyA1upfgKqCXxVxaXGBHCt3zPXHb3NjKL9w",
 
   authDomain: "senior-design-mini-proje-c95b5.firebaseapp.com",
 
-  databaseURL: "https://senior-design-mini-proje-c95b5-default-rtdb.firebaseio.com",
+  databaseURL:
+    "https://senior-design-mini-proje-c95b5-default-rtdb.firebaseio.com",
 
   projectId: "senior-design-mini-proje-c95b5",
 
@@ -21,20 +21,18 @@ const firebaseConfig = {
 
   appId: "1:503443879304:web:f11c62f2888ae75e35f63d",
 
-  measurementId: "G-17PKYZDMTN"
-
+  measurementId: "G-17PKYZDMTN",
 };
 
 try {
-  firebase.initializeApp(firebaseConfig)
-  } catch (err) {
+  firebase.initializeApp(firebaseConfig);
+} catch (err) {
   // we skip the "already exists" message which is
   // not an actual error when we're hot-reloading
   if (!/already exists/.test(err.message)) {
-  console.error('Firebase initialization error', err.stack)
+    console.error("Firebase initialization error", err.stack);
   }
-  }
-
+}
 
 export default function HomeScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -45,10 +43,21 @@ export default function HomeScreen(props) {
   const [promptForServings, setPromptForServings] = useState(false);
   const [servings, setServings] = useState(1);
 
+  var requestUri = "http://3.21.164.160:8000/users";
+  console.log(requestUri);
+  axios
+    .get(requestUri)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     })();
   }, []);
 
@@ -56,30 +65,34 @@ export default function HomeScreen(props) {
     const dbh = firebase.firestore();
 
     dbh.collection("scannedFood").doc("10011").set({
-      barcode:"1231212",
+      barcode: "1231212",
       calorieCount: "1002",
-      itemName:"Pudding",
-      portions:"3"
-})
+      itemName: "Pudding",
+      portions: "3",
+    });
   }
   const retrieveResult = (barcode) => {
-    var requestUri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query=" + barcode + "&dataType=Branded";
+    var requestUri =
+      "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query=" +
+      barcode +
+      "&dataType=Branded";
     console.log(requestUri);
-    axios.get(requestUri)
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => {
-              console.log(error);
-            })
-  }
+    axios
+      .get(requestUri)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     setPromptForServings(true);
     setBarcodeType(type);
     //add this line for IOS
-    data = data.substring(1)
+    data = data.substring(1);
     setBarcodeValue(data);
     console.log(data);
     console.log(barcodeValue);
@@ -90,31 +103,25 @@ export default function HomeScreen(props) {
 
   const GetRecipe = () => {
     // firebase scanned items
-  }
+  };
 
   const PostScannedItem = ({ name, calories }) => {
     // firebase scanned item
     // barcode, item name, calories
-  }
+  };
 
   const createAlert = () =>
-    Alert.alert(
-      "Choose Servings",
-      "I know this is jank AF",
-      [
-        {
-          text: "1",
-          onPress: () => setServings(1),
-        },
-        {
-          text: "2",
-          onPress: () => setServings(2),
-        },
-        { text: "3", 
-          onPress: () => setServings(3),
-        }
-      ]
-    );
+    Alert.alert("Choose Servings", "I know this is jank AF", [
+      {
+        text: "1",
+        onPress: () => setServings(1),
+      },
+      {
+        text: "2",
+        onPress: () => setServings(2),
+      },
+      { text: "3", onPress: () => setServings(3) },
+    ]);
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission.</Text>;
@@ -129,16 +136,20 @@ export default function HomeScreen(props) {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-      {promptForServings && <Button title={'Choose Servings'} onPress={createAlert} />}
-    </View>    
+      {scanned && (
+        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+      )}
+      {promptForServings && (
+        <Button title={"Choose Servings"} onPress={createAlert} />
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
-  });
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+});
