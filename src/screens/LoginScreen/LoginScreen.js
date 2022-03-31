@@ -29,9 +29,13 @@ export default function LoginScreen({ navigation }) {
             // console.log(response["data"]);
             var userlist = response["data"];
             userlist.forEach((user, i) => {
-              console.log(user.email);
+              console.log(user.last_name);
               if (user.email == email) {
-                navigation.navigate("Home");
+                navigation.navigate("Home", {
+                  first_name: user.first_name,
+                  last_name: user.last_name,
+                  pcp: user.pcp,
+                });
               }
             });
             navigation.navigate("Register");
