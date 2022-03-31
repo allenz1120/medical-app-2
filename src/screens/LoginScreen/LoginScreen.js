@@ -17,19 +17,15 @@ export default function LoginScreen({ navigation }) {
       });
 
       if (result.type === "success") {
-        // console.log(result);
         var email = result.user.email;
-        // console.log(email);
         // Query db to see if user is already registered
         var requestUri = "http://3.92.181.151:8000/users/";
         console.log(requestUri);
         axios
           .get(requestUri)
           .then((response) => {
-            // console.log(response["data"]);
             var userlist = response["data"];
             userlist.forEach((user, i) => {
-              console.log(user.email);
               if (user.email == email) {
                 navigation.navigate("Home");
               }
