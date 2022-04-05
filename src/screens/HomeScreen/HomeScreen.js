@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import axios from "axios";
-import {Card} from 'react-native-shadow-cards';
-
+import { Card } from "react-native-shadow-cards";
 
 
 export default function HomeScreen({ navigation, route }) {
@@ -28,6 +27,7 @@ export default function HomeScreen({ navigation, route }) {
       <Text style={styles.text}>Your contact information and notification preferences need review. Your current email address is {route.params.email} and address is {route.params.address}. Is this correct?
 </Text>
       <Button title="Confirm" color="green" accessibilityLabel="Learn more about this green button"/>
+
       </Card>
       <Card style={{padding: 10, margin: 10, backgroundColor:"#d4e4f4"}}>
       <Text style={styles.header2}>Save time while you save paper! Sign up for paperless billing.</Text>
@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation, route }) {
       
       
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -52,10 +52,11 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 10,
-    color: 'hsl(205.2,88.7%,41.6%)',
-    fontWeight: 'bold',
+    color: "hsl(205.2,88.7%,41.6%)",
+    fontWeight: "bold",
     fontSize: 30,
   },
+
   header2: {
     color: 'hsl(205.2,88.7%,41.6%)',
     fontWeight: 'bold',
@@ -71,4 +72,5 @@ const styles = StyleSheet.create({
     color: '#565656',
     fontSize: 14,
   }
+
 });
