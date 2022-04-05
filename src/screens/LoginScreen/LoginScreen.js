@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
         var email = result.user.email;
         // console.log(email);
         // Query db to see if user is already registered
-        var requestUri = "http://3.92.181.151:8000/users/";
+        var requestUri = "http://35.171.161.118:8000/users/";
         console.log(requestUri);
         axios
           .get(requestUri)
@@ -35,6 +35,8 @@ export default function LoginScreen({ navigation }) {
                   first_name: user.first_name,
                   last_name: user.last_name,
                   pcp: user.pcp,
+                  email: user.email,
+                  address: user.address
                 });
               }
             });

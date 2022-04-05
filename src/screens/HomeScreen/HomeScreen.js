@@ -24,6 +24,22 @@ export default function HomeScreen({ navigation, route }) {
     </View>
     </View>
       </Card>
+      <Card style={{padding: 10, margin: 10, backgroundColor:"#d4e4f4"}}>
+      <Text style={styles.text}>Your contact information and notification preferences need review. Your current email address is {route.params.email} and address is {route.params.address}. Is this correct?
+</Text>
+      <Button title="Confirm" color="green" accessibilityLabel="Learn more about this green button"/>
+      </Card>
+      <Card style={{padding: 10, margin: 10, backgroundColor:"#d4e4f4"}}>
+      <Text style={styles.header2}>Save time while you save paper! Sign up for paperless billing.</Text>
+      <Button title="Learn More" color="green" accessibilityLabel="Learn more about this green button"/>
+      </Card>
+      <Card style={{padding: 10, margin: 10, backgroundColor:"#d4e4f4"}}>
+      <Text style={styles.header2}>Proof of COVID-19 Vaccination</Text>
+      <Text style={styles.text}>Click here to share your COVID-19 testing and vaccination information quickly, easily, and securely, right from MyHealth.</Text>
+      <Button title="Check it out" color="green" accessibilityLabel="Learn more about this green button"/>
+      </Card>
+      
+      
     </View>
   )
 }
