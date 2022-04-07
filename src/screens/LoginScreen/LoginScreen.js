@@ -26,6 +26,7 @@ export default function LoginScreen({ navigation }) {
           .then((response) => {
             var user_found = false
             var userlist = response["data"];
+            console.log(response["data"]);
             userlist.forEach((user, i) => {
               if (user.email == email) {
                 user_found = true
@@ -34,7 +35,7 @@ export default function LoginScreen({ navigation }) {
                   last_name: user.last_name,
                   pcp: user.pcp,
                   email: user.email,
-                  address: user.address
+                  address: user.address,
                 });
               }
             });
