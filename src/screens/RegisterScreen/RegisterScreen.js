@@ -13,6 +13,7 @@ import axios from "axios";
 import { Card } from "react-native-shadow-cards";
 import Picker from "../../../components/Picker";
 import DatePicker from "react-native-datepicker";
+import { NavigationContainer } from "@react-navigation/native";
 
 export default function RegisterScreen(props) {
   const [date, setDate] = useState("2000-12-03");

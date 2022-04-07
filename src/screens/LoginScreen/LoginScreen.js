@@ -24,12 +24,12 @@ export default function LoginScreen({ navigation }) {
         axios
           .get(requestUri)
           .then((response) => {
-            var user_found = false
+            var user_found = false;
             var userlist = response["data"];
-            console.log(response["data"]);
+            // console.log(response["data"]);
             userlist.forEach((user, i) => {
               if (user.email == email) {
-                user_found = true
+                user_found = true;
                 navigation.navigate("Home", {
                   first_name: user.first_name,
                   last_name: user.last_name,
@@ -39,7 +39,7 @@ export default function LoginScreen({ navigation }) {
                 });
               }
             });
-            if (user_found == false){
+            if (user_found == false) {
               navigation.navigate("Register");
             }
           })

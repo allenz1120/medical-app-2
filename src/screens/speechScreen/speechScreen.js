@@ -6,12 +6,6 @@ import { Card } from "react-native-shadow-cards";
 export default function HomeScreen({ navigation, route }) {
   return (
     <View>
-      <script
-        async
-        defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXgSvsrOE4dNXKsxbq8Hz6KQynnU3qXis"
-        type="text/javascript"
-      ></script>
       <Text style={styles.header}>
         {" "}
         Welcome {route.params.first_name} {route.params.last_name}!
