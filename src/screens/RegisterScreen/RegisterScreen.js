@@ -28,7 +28,7 @@ export default function RegisterScreen(props) {
   console.log(pcp);
 
   const pushData = (date, email, firstName, lastName, address, pcp) => {
-    var requestUri = "http://35.171.161.118:8000/users/";
+    var requestUri = "http://54.159.10.87:8000/users/";
     console.log(requestUri);
     console.log(email);
     console.log(firstName);
