@@ -6,7 +6,7 @@ import {
   LoginScreen,
   HomeScreen,
   RegisterScreen,
-  SpeechScreen,
+  speechScreen,
 } from "./src/screens";
 // import {decode, encode} from 'base-64'
 // if (!global.btoa) {  global.btoa = encode }
@@ -20,11 +20,11 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Speech">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Speech" component={SpeechScreen} />
+        <Stack.Screen name="Speech" component={speechScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

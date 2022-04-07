@@ -6,14 +6,11 @@ import { Card } from "react-native-shadow-cards";
 export default function HomeScreen({ navigation, route }) {
   return (
     <View>
-      <Text style={styles.header}>
-        {" "}
-        Welcome {route.params.first_name} {route.params.last_name}!
-      </Text>
+      <Text style={styles.header}>SPEECH SCREEN</Text>
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
         <Text style={styles.header2}>Care Team and Recent Providers</Text>
         <View style={{ backgroundColor: "white", padding: 10 }}>
-          <Text style={styles.header3}>{route.params.pcp}, MD</Text>
+          <Text style={styles.header3}>Text, MD</Text>
           <Text style={styles.text}>Primary Care</Text>
           <Text style={styles.text}>Internal Medicine</Text>
           <View
@@ -35,11 +32,7 @@ export default function HomeScreen({ navigation, route }) {
         </View>
       </Card>
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Text style={styles.text}>
-          Your contact information and notification preferences need review.
-          Your current email address is {route.params.email} and address is{" "}
-          {route.params.address}. Is this correct?
-        </Text>
+        <Text style={styles.text}>Text</Text>
         <Button
           title="Confirm"
           color="green"
