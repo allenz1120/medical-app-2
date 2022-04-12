@@ -19,7 +19,7 @@ export default function LoginScreen({ navigation }) {
       if (result.type === "success") {
         var email = result.user.email;
         // Query db to see if user is already registered
-        var requestUri = "http://54.159.10.87:8000/users/";
+        var requestUri = "http://3.84.15.81:8000/users/";
         console.log(requestUri);
         axios
           .get(requestUri)

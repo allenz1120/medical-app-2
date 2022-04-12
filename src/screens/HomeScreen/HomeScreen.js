@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert, Image } from "react-native";
+import { Text, View, StyleSheet, Button, Alert, Image, Dimensions } from "react-native";
 import axios from "axios";
 import { Card } from "react-native-shadow-cards";
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 
 export default function HomeScreen({ navigation, route }) {
+
+  var [home_longitude, set_home_longitude] = useState()
+  var [home_latitude, set_home_latitude] = useState()
+  var [home_location, set_home_location] = useState()
+  var requestUri = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + encodeURIComponent(route.params.address) + ".json?access_token=pk.eyJ1IjoiYWxsZW56MTEyMCIsImEiOiJja2JneTRhb3YwMDE0MzVucmQ5cHJxOWhiIn0.PIK8vgLwjuIxqm9VChhI-g";
+  axios
+  .get(requestUri)
+  .then((response) =>{
+    set_home_longitude(response["data"].features[0].center[0])
+    set_home_latitude(response["data"].features[0].center[1])
+    set_home_location(response["data"].features[0].place_name)
+  })
+
   return (
     <View>
-      <script
-        async
-        defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXgSvsrOE4dNXKsxbq8Hz6KQynnU3qXis"
-        type="text/javascript"
-      ></script>
       <Text style={styles.header}>
         {" "}
         Welcome {route.params.first_name} {route.params.last_name}!
@@ -42,7 +51,6 @@ export default function HomeScreen({ navigation, route }) {
       </Card>
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
         <Text style={styles.text}>
-          Your contact information and notification preferences need review.
           Your current email address is {route.params.email} and address is{" "}
           {route.params.address}. Is this correct?
         </Text>
@@ -62,7 +70,7 @@ export default function HomeScreen({ navigation, route }) {
           accessibilityLabel="Learn more about this green button"
         />
       </Card>
-      <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
+      {/* <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
         <Text style={styles.header2}>Proof of COVID-19 Vaccination</Text>
         <Text style={styles.text}>
           Click here to share your COVID-19 testing and vaccination information
@@ -73,7 +81,23 @@ export default function HomeScreen({ navigation, route }) {
           color="green"
           accessibilityLabel="Learn more about this green button"
         />
-      </Card>
+      </Card> */}
+
+      <MapView
+       provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+       style={styles.map}
+       region={{
+         latitude: home_latitude,
+         longitude: home_longitude,
+         latitudeDelta: 0.015,
+         longitudeDelta: 0.0121,
+       }}
+     >
+       <Marker
+      coordinate={{ latitude : home_latitude , longitude : home_longitude }}
+      title = {home_location}
+    />
+    </MapView>
     </View>
   );
 }
@@ -105,5 +129,10 @@ const styles = StyleSheet.create({
     padding: 1,
     color: "#565656",
     fontSize: 14,
+  },
+  map: {
+    height:250,
+    width:Dimensions.get('window').width,
+    
   },
 });
