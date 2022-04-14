@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert, Image, Dimensions } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Alert,
+  Image,
+  Dimensions,
+} from "react-native";
 import axios from "axios";
 import { Card } from "react-native-shadow-cards";
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { Marker } from "react-native-maps";
 
 export default function HomeScreen({ navigation, route }) {
-
-  var [home_longitude, set_home_longitude] = useState()
-  var [home_latitude, set_home_latitude] = useState()
-  var [home_location, set_home_location] = useState()
-  var requestUri = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + encodeURIComponent(route.params.address) + ".json?access_token=pk.eyJ1IjoiYWxsZW56MTEyMCIsImEiOiJja2JneTRhb3YwMDE0MzVucmQ5cHJxOWhiIn0.PIK8vgLwjuIxqm9VChhI-g";
-  axios
-  .get(requestUri)
-  .then((response) =>{
-    set_home_longitude(response["data"].features[0].center[0])
-    set_home_latitude(response["data"].features[0].center[1])
-    set_home_location(response["data"].features[0].place_name)
-  })
+  var [home_longitude, set_home_longitude] = useState(0);
+  var [home_latitude, set_home_latitude] = useState(0);
+  var [home_location, set_home_location] = useState("hi");
+  var requestUri =
+    "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
+    encodeURIComponent("86 Linden St Apt 1 Allston, MA 02134") +
+    ".json?access_token=pk.eyJ1IjoiYWxsZW56MTEyMCIsImEiOiJja2JneTRhb3YwMDE0MzVucmQ5cHJxOWhiIn0.PIK8vgLwjuIxqm9VChhI-g";
+  axios.get(requestUri).then((response) => {
+    set_home_longitude(response["data"].features[0].center[0]);
+    set_home_latitude(response["data"].features[0].center[1]);
+    set_home_location(response["data"].features[0].place_name);
+  });
 
   return (
     <View>
@@ -72,24 +80,24 @@ export default function HomeScreen({ navigation, route }) {
       </Card>
 
       <MapView
-       provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-       style={styles.map}
-       region={{
-         latitude: (home_latitude+42.345550)/2,
-         longitude: (home_longitude-71.10094)/2,
-         latitudeDelta: 0.015,
-         longitudeDelta: 0.0121,
-       }}
-     >
-       <Marker
-      coordinate={{ latitude : home_latitude , longitude : home_longitude }}
-      title = {home_location}
-    />
-    <Marker
-      coordinate={{ latitude : 42.345550 , longitude : -71.100940 }}
-      title = "Boston Vanguard"
-    />
-    </MapView>
+        provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+        style={styles.map}
+        region={{
+          latitude: home_latitude,
+          longitude: home_longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
+        }}
+      >
+        <Marker
+          coordinate={{ latitude: home_latitude, longitude: home_longitude }}
+          title={home_location}
+        />
+        <Marker
+          coordinate={{ latitude: 42.34555, longitude: -71.10094 }}
+          title="Boston Vanguard"
+        />
+      </MapView>
     </View>
   );
 }
@@ -123,8 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   map: {
-    height:250,
-    width:Dimensions.get('window').width,
-    
+    height: 250,
+    width: Dimensions.get("window").width,
   },
 });
