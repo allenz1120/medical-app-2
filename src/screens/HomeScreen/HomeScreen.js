@@ -70,25 +70,13 @@ export default function HomeScreen({ navigation, route }) {
           accessibilityLabel="Learn more about this green button"
         />
       </Card>
-      {/* <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Text style={styles.header2}>Proof of COVID-19 Vaccination</Text>
-        <Text style={styles.text}>
-          Click here to share your COVID-19 testing and vaccination information
-          quickly, easily, and securely, right from MyHealth.
-        </Text>
-        <Button
-          title="Check it out"
-          color="green"
-          accessibilityLabel="Learn more about this green button"
-        />
-      </Card> */}
 
       <MapView
        provider={PROVIDER_GOOGLE} // remove if not using Google Maps
        style={styles.map}
        region={{
-         latitude: home_latitude,
-         longitude: home_longitude,
+         latitude: (home_latitude+42.345550)/2,
+         longitude: (home_longitude-71.10094)/2,
          latitudeDelta: 0.015,
          longitudeDelta: 0.0121,
        }}
@@ -96,6 +84,10 @@ export default function HomeScreen({ navigation, route }) {
        <Marker
       coordinate={{ latitude : home_latitude , longitude : home_longitude }}
       title = {home_location}
+    />
+    <Marker
+      coordinate={{ latitude : 42.345550 , longitude : -71.100940 }}
+      title = "Boston Vanguard"
     />
     </MapView>
     </View>
