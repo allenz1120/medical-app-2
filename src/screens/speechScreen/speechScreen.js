@@ -2,17 +2,44 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert, Image } from "react-native";
 import axios from "axios";
 import { Card } from "react-native-shadow-cards";
+import {Leopard, LeopardErrors } from "@picovoice/leopard-react-native";
 
-export default function HomeScreen({ navigation, route }) {
+export default function SpeechScreen({ navigation, route }) {
+  const [recording, setRecording] = React.useState();
+  const [recordings, setRecordings] = React.useState([]);
+  const [message, getMessage] = React.useState("");
+  const ACCESS_KEY=''
+
+  async function startRecording(){
+    setRecording(1)
+    getMessage("ON")
+  }
+
+
+  async function stopRecording(){
+    setRecording(0);
+    getMessage("OFF")
+    speech2text()
+  }
+
+  async function speech2text(){
+    try {
+      const leo = await Leopard.create(ACCESS_KEY)
+      transcript = await leo.processFile(require("../../../assets/TEST_SPEECH_2.wav"))
+      getMessage(transcript)
+    }
+    catch (err){
+      if (err instanceof LeopardErrors){
+        getMessage("Error")
+      }
+    }
+  }
   return (
     <View>
       <Text style={styles.header}>SPEECH SCREEN</Text>
+
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Text style={styles.header2}>Care Team and Recent Providers</Text>
         <View style={{ backgroundColor: "white", padding: 10 }}>
-          <Text style={styles.header3}>Text, MD</Text>
-          <Text style={styles.text}>Primary Care</Text>
-          <Text style={styles.text}>Internal Medicine</Text>
           <View
             style={{
               flexDirection: "row",
@@ -31,38 +58,41 @@ export default function HomeScreen({ navigation, route }) {
           </View>
         </View>
       </Card>
+      
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Text style={styles.text}>Text</Text>
         <Button
-          title="Confirm"
+          mode="contained"
+          icon="record"
+          title="update"
           color="green"
           accessibilityLabel="Learn more about this green button"
         />
       </Card>
+
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Text style={styles.header2}>
-          Save time while you save paper! Sign up for paperless billing.
-        </Text>
+      <Text style={styles.text}>
+        Note: All audio is processed locally. We do not use a cloud service for automatic speech recognition.
+      </Text>
         <Button
-          title="Learn More"
+          title={recording ? "Record" : "Stop"}
+          mode="contained"
           color="green"
-          accessibilityLabel="Learn more about this green button"
+          //onPress={() => Alert.alert("Testing 1,2,3")}
+          onPress={recording ? stopRecording : startRecording}
         />
-      </Card>
-      <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Text style={styles.header2}>Proof of COVID-19 Vaccination</Text>
-        <Text style={styles.text}>
-          Click here to share your COVID-19 testing and vaccination information
-          quickly, easily, and securely, right from MyHealth.
+        <Text styles={styles.text}>
+          Transcript: {message}
         </Text>
-        <Button
-          title="Check it out"
-          color="green"
-          accessibilityLabel="Learn more about this green button"
-        />
+
       </Card>
     </View>
   );
+}
+
+const options = {
+  sampleRate: 160000,
+  channels: 1,
+  bitsPerSample: 16
 }
 
 const styles = StyleSheet.create({
