@@ -8,30 +8,37 @@ export default function SpeechScreen({ navigation, route }) {
   const [recording, setRecording] = React.useState();
   const [recordings, setRecordings] = React.useState([]);
   const [message, getMessage] = React.useState("");
-  const ACCESS_KEY=''
+
+  //Need to storge key securly
+  const ACCESS_KEY="5mBsrtV5zu117NteOFRbuJ6EwINBkNsVtxy166XEAjNx4GllF6GSVw=="
+  const MODEL_PATH=("../../../assets/leopard_params.pv")
 
   async function startRecording(){
     setRecording(1)
-    getMessage("ON")
+    getMessage("OFF")
   }
 
 
   async function stopRecording(){
     setRecording(0);
-    getMessage("OFF")
+    getMessage("ON")
     speech2text()
   }
 
   async function speech2text(){
     try {
-      const leo = await Leopard.create(ACCESS_KEY)
-      transcript = await leo.processFile(require("../../../assets/TEST_SPEECH_2.wav"))
+      const leopard = await Leopard.create(ACCESS_KEY, MODEL_PATH)
+      //Audio file must be at least 16ksps
+      //transcript = await leo.processFile("../../../assets/TEST_SPEECH_2.wav", "../../../assets/leopard_params.pv")
+      const transcript = await leopard.processFile("/home/tony/Documents/Courses/EC530/medical-app-2/assets/TEST_SPEECH_2.wav")
+
       getMessage(transcript)
+      leopard.delete()
+
     }
     catch (err){
-      if (err instanceof LeopardErrors){
         getMessage("Error")
-      }
+        console.log(err)
     }
   }
   return (
