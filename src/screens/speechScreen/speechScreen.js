@@ -10,7 +10,7 @@ export default function SpeechScreen({ navigation, route }) {
   const [message, getMessage] = React.useState("");
 
   //Need to storge key securly
-  const ACCESS_KEY="5mBsrtV5zu117NteOFRbuJ6EwINBkNsVtxy166XEAjNx4GllF6GSVw=="
+  const ACCESS_KEY=""
   const MODEL_PATH=("../../../assets/leopard_params.pv")
 
   async function startRecording(){
