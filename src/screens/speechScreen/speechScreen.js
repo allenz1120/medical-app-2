@@ -3,37 +3,74 @@ import { Text, View, StyleSheet, Button, Alert, Image } from "react-native";
 import axios from "axios";
 import { Card } from "react-native-shadow-cards";
 import {Leopard, LeopardErrors } from "@picovoice/leopard-react-native";
+import { Audio }from 'expo-av';
 
 export default function SpeechScreen({ navigation, route }) {
   const [recording, setRecording] = React.useState();
-  const [recordings, setRecordings] = React.useState([]);
   const [message, getMessage] = React.useState("");
+  const [rec, recInfo] = React.useState();
 
   //Need to storge key securly
   const ACCESS_KEY="5mBsrtV5zu117NteOFRbuJ6EwINBkNsVtxy166XEAjNx4GllF6GSVw=="
   const MODEL_PATH=("../../../assets/leopard_params.pv")
 
-  async function startRecording(){
-    setRecording(1)
-    getMessage("OFF")
+  /**
+   *  Checks device permissions and them start the recording
+   */
+  async function startRecording() {
+    try {
+      console.log('Requesting permissions..');
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      }); 
+      console.log('Permission granted. Starting recording..');
+      const { recording } = await Audio.Recording.createAsync(
+         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+      );
+      setRecording(recording);
+      console.log('Recording started');
+    } catch (err) {
+      console.error('Failed to start recording', err);
+    }
   }
 
+  /**
+   * Stops recordings, saves it, the performs speech to text. The transcript is displayed to the user.
+   */
+  async function stopRecording() {
+    await recording.stopAndUnloadAsync();
+    console.log("Stopped recording")
+    let updatedRecInfo = rec;
+    const { sound, status } = await recording.createNewLoadedSoundAsync();
+    
+    updatedRecInfo = {
+      sound: sound,
+      duration: (status.durationMillis),
+      file: recording.getURI()
+    };
 
-  async function stopRecording(){
-    setRecording(0);
-    getMessage("ON")
+    recInfo(updatedRecInfo);
+    setRecording(undefined);
     speech2text()
   }
 
+
   async function speech2text(){
     try {
+      //console.log(ACCESS_KEY)
+      //console.log(MODEL_PATH)
       const leopard = await Leopard.create(ACCESS_KEY, MODEL_PATH)
+      console.log("Leopard Created")
       //Audio file must be at least 16ksps
       //transcript = await leo.processFile("../../../assets/TEST_SPEECH_2.wav", "../../../assets/leopard_params.pv")
-      const transcript = await leopard.processFile("/home/tony/Documents/Courses/EC530/medical-app-2/assets/TEST_SPEECH_2.wav")
+      //const transcript = await leopard.processFile("/home/tony/Documents/Courses/EC530/medical-app-2/assets/TEST_SPEECH_2.wav")
+      const transcript = await leopard.processFile(rec.file)
 
       getMessage(transcript)
       leopard.delete()
+      console.log("Leopard Deleted")
 
     }
     catch (err){
@@ -41,6 +78,7 @@ export default function SpeechScreen({ navigation, route }) {
         console.log(err)
     }
   }
+
   return (
     <View>
       <Text style={styles.header}>SPEECH SCREEN</Text>
@@ -66,40 +104,32 @@ export default function SpeechScreen({ navigation, route }) {
         </View>
       </Card>
       
-      <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
-        <Button
-          mode="contained"
-          icon="record"
-          title="update"
-          color="green"
-          accessibilityLabel="Learn more about this green button"
-        />
-      </Card>
 
       <Card style={{ padding: 10, margin: 10, backgroundColor: "#d4e4f4" }}>
       <Text style={styles.text}>
         Note: All audio is processed locally. We do not use a cloud service for automatic speech recognition.
       </Text>
-        <Button
-          title={recording ? "Record" : "Stop"}
+      <Button
+          title={recording ? "Stop" : "Record"}
           mode="contained"
           color="green"
           //onPress={() => Alert.alert("Testing 1,2,3")}
           onPress={recording ? stopRecording : startRecording}
-        />
-        <Text styles={styles.text}>
-          Transcript: {message}
-        </Text>
+      />
+      <Text style={styles.fill}>Recording</Text>
+      <Button 
+      style={styles.button} 
+      color="green"
+      onPress={() => rec.sound.replayAsync()} 
+      title="Play"></Button>
+        
+      <Text styles={styles.text}>
+        Transcript: {message}
+      </Text>
 
       </Card>
     </View>
   );
-}
-
-const options = {
-  sampleRate: 160000,
-  channels: 1,
-  bitsPerSample: 16
 }
 
 const styles = StyleSheet.create({
